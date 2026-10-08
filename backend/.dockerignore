@@ -1,0 +1,6 @@
+target/
+var/
+.env
+.git/
+.idea/
+.DS_Store

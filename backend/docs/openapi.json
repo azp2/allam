@@ -1,0 +1,3636 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Allam Journal API",
+    "version": "1.0.0",
+    "description": "Single-journal OJS workflow. JSON commands and multipart uploads require a session-bound CSRF token. See README for login and resource policies. Response bodies are projections documented in architecture.md."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "The backend serving this documentation"
+    }
+  ],
+  "paths": {
+    "/api/auth/csrf": {
+      "get": {
+        "summary": "GET /api/auth/csrf",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "get_api_auth_csrf"
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "POST /api/auth/register",
+        "security": [],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "post_api_auth_register"
+      }
+    },
+    "/api/me": {
+      "get": {
+        "summary": "GET /api/me",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "get_api_me"
+      }
+    },
+    "/api/me/orcid/authorize": {
+      "post": {
+        "summary": "POST /api/me/orcid/authorize",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "post_api_me_orcid_authorize"
+      }
+    },
+    "/api/me/orcid/callback": {
+      "get": {
+        "summary": "GET /api/me/orcid/callback",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "state",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "get_api_me_orcid_callback"
+      }
+    },
+    "/api/submissions": {
+      "post": {
+        "summary": "POST /api/submissions",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "post_api_submissions"
+      },
+      "get": {
+        "summary": "GET /api/submissions",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "get_api_submissions"
+      }
+    },
+    "/api/submissions/{id}": {
+      "get": {
+        "summary": "GET /api/submissions/{id}",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "get_api_submissions_id"
+      }
+    },
+    "/api/submissions/{id}/metadata": {
+      "put": {
+        "summary": "PUT /api/submissions/{id}/metadata",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "put_api_submissions_id_metadata"
+      }
+    },
+    "/api/submissions/{id}/transitions": {
+      "post": {
+        "summary": "POST /api/submissions/{id}/transitions",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "post_api_submissions_id_transitions"
+      }
+    },
+    "/api/submissions/{id}/section-editor": {
+      "put": {
+        "summary": "PUT /api/submissions/{id}/section-editor",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAssignment"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "put_api_submissions_id_section_editor"
+      }
+    },
+    "/api/submissions/{id}/staff": {
+      "post": {
+        "summary": "POST /api/submissions/{id}/staff",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "post_api_submissions_id_staff"
+      }
+    },
+    "/api/submissions/{id}/review-mode": {
+      "put": {
+        "summary": "PUT /api/submissions/{id}/review-mode",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModeInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "put_api_submissions_id_review_mode"
+      }
+    },
+    "/api/submissions/{id}/audit": {
+      "get": {
+        "summary": "GET /api/submissions/{id}/audit",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "get_api_submissions_id_audit"
+      }
+    },
+    "/api/submissions/{id}/files": {
+      "post": {
+        "summary": "POST /api/submissions/{id}/files",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "kind": {
+                    "$ref": "#/components/schemas/FileKind"
+                  },
+                  "format": {
+                    "$ref": "#/components/schemas/Format"
+                  },
+                  "assignmentId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file",
+                  "kind"
+                ]
+              }
+            }
+          }
+        },
+        "tags": [
+          "Files & galleys"
+        ],
+        "operationId": "post_api_submissions_id_files"
+      },
+      "get": {
+        "summary": "GET /api/submissions/{id}/files",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Files & galleys"
+        ],
+        "operationId": "get_api_submissions_id_files"
+      }
+    },
+    "/api/files/{id}/approve-blind": {
+      "post": {
+        "summary": "POST /api/files/{id}/approve-blind",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "tags": [
+          "Files & galleys"
+        ],
+        "operationId": "post_api_files_id_approve_blind"
+      }
+    },
+    "/api/files/{id}/download": {
+      "get": {
+        "summary": "GET /api/files/{id}/download",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Files & galleys"
+        ],
+        "operationId": "get_api_files_id_download"
+      }
+    },
+    "/api/submissions/{id}/reviews": {
+      "post": {
+        "summary": "POST /api/submissions/{id}/reviews",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Peer review"
+        ],
+        "operationId": "post_api_submissions_id_reviews"
+      }
+    },
+    "/api/reviews": {
+      "get": {
+        "summary": "GET /api/reviews",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Peer review"
+        ],
+        "operationId": "get_api_reviews"
+      }
+    },
+    "/api/reviews/{id}": {
+      "get": {
+        "summary": "GET /api/reviews/{id}",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Peer review"
+        ],
+        "operationId": "get_api_reviews_id"
+      }
+    },
+    "/api/reviews/{id}/response": {
+      "post": {
+        "summary": "POST /api/reviews/{id}/response",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponseInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Peer review"
+        ],
+        "operationId": "post_api_reviews_id_response"
+      }
+    },
+    "/api/reviews/{id}/evaluation": {
+      "post": {
+        "summary": "POST /api/reviews/{id}/evaluation",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Peer review"
+        ],
+        "operationId": "post_api_reviews_id_evaluation"
+      }
+    },
+    "/api/submissions/{id}/discussions": {
+      "get": {
+        "summary": "GET /api/submissions/{id}/discussions",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Discussions"
+        ],
+        "operationId": "get_api_submissions_id_discussions"
+      },
+      "post": {
+        "summary": "POST /api/submissions/{id}/discussions",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscussionInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Discussions"
+        ],
+        "operationId": "post_api_submissions_id_discussions"
+      }
+    },
+    "/api/issues": {
+      "post": {
+        "summary": "POST /api/issues",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issues & publication"
+        ],
+        "operationId": "post_api_issues"
+      },
+      "get": {
+        "summary": "GET /api/issues",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Issues & publication"
+        ],
+        "operationId": "get_api_issues"
+      }
+    },
+    "/api/issues/{id}/articles": {
+      "post": {
+        "summary": "POST /api/issues/{id}/articles",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issues & publication"
+        ],
+        "operationId": "post_api_issues_id_articles"
+      }
+    },
+    "/api/issues/{id}/publish": {
+      "post": {
+        "summary": "POST /api/issues/{id}/publish",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "tags": [
+          "Issues & publication"
+        ],
+        "operationId": "post_api_issues_id_publish"
+      }
+    },
+    "/api/submissions/{id}/publish": {
+      "post": {
+        "summary": "POST /api/submissions/{id}/publish",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Submissions & workflow"
+        ],
+        "operationId": "post_api_submissions_id_publish"
+      }
+    },
+    "/api/public/sections": {
+      "get": {
+        "summary": "GET /api/public/sections",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_sections"
+      }
+    },
+    "/api/public/issues": {
+      "get": {
+        "summary": "GET /api/public/issues",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_issues"
+      }
+    },
+    "/api/public/issues/{id}": {
+      "get": {
+        "summary": "GET /api/public/issues/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_issues_id"
+      }
+    },
+    "/api/public/articles": {
+      "get": {
+        "summary": "GET /api/public/articles",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_articles"
+      }
+    },
+    "/api/public/articles/{id}": {
+      "get": {
+        "summary": "GET /api/public/articles/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_articles_id"
+      }
+    },
+    "/api/public/galleys/{id}/download": {
+      "get": {
+        "summary": "GET /api/public/galleys/{id}/download",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_galleys_id_download"
+      }
+    },
+    "/api/admin/users": {
+      "post": {
+        "summary": "POST /api/admin/users",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "post_api_admin_users"
+      },
+      "get": {
+        "summary": "GET /api/admin/users",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_users"
+      }
+    },
+    "/api/admin/users/{id}/roles": {
+      "get": {
+        "summary": "GET /api/admin/users/{id}/roles",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_users_id_roles"
+      },
+      "post": {
+        "summary": "POST /api/admin/users/{id}/roles",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrantInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "post_api_admin_users_id_roles"
+      }
+    },
+    "/api/admin/roles/{id}": {
+      "delete": {
+        "summary": "DELETE /api/admin/roles/{id}",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "delete_api_admin_roles_id"
+      }
+    },
+    "/api/admin/sections": {
+      "post": {
+        "summary": "POST /api/admin/sections",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamesInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "post_api_admin_sections"
+      }
+    },
+    "/api/admin/review-forms": {
+      "post": {
+        "summary": "POST /api/admin/review-forms",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "post_api_admin_review_forms"
+      },
+      "get": {
+        "summary": "GET /api/admin/review-forms",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_review_forms"
+      }
+    },
+    "/api/editor/reviewers": {
+      "get": {
+        "summary": "GET /api/editor/reviewers",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_editor_reviewers"
+      }
+    },
+    "/api/admin/email-templates/{type}": {
+      "put": {
+        "summary": "PUT /api/admin/email-templates/{type}",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "put_api_admin_email_templates_type"
+      }
+    },
+    "/api/admin/email-templates": {
+      "get": {
+        "summary": "GET /api/admin/email-templates",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_email_templates"
+      }
+    },
+    "/api/admin/settings/{key}": {
+      "put": {
+        "summary": "PUT /api/admin/settings/{key}",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "put_api_admin_settings_key"
+      }
+    },
+    "/api/admin/settings": {
+      "get": {
+        "summary": "GET /api/admin/settings",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_settings"
+      }
+    },
+    "/api/public/settings/ui": {
+      "get": {
+        "summary": "GET /api/public/settings/ui",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_settings_ui"
+      }
+    },
+    "/api/admin/outbox": {
+      "get": {
+        "summary": "GET /api/admin/outbox",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_outbox"
+      }
+    },
+    "/api/admin/outbox/{id}/retry": {
+      "post": {
+        "summary": "POST /api/admin/outbox/{id}/retry",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "post_api_admin_outbox_id_retry"
+      }
+    },
+    "/api/admin/usage": {
+      "get": {
+        "summary": "GET /api/admin/usage",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "in": "query",
+            "name": "until",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "tags": [
+          "Administration"
+        ],
+        "operationId": "get_api_admin_usage"
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "POST /api/auth/login",
+        "security": [],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "post_api_auth_login"
+      }
+    },
+    "/api/covers": {
+      "post": {
+        "summary": "POST /api/covers",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "201": {
+            "description": "Created resource with id"
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "tags": [
+          "Files & galleys"
+        ],
+        "operationId": "post_api_covers"
+      }
+    },
+    "/api/issues/{id}/cover": {
+      "put": {
+        "summary": "PUT /api/issues/{id}/cover",
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          },
+          "204": {
+            "description": "Successful command"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Fetch /api/auth/csrf using the same session cookie."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoverInput"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issues & publication"
+        ],
+        "operationId": "put_api_issues_id_cover"
+      }
+    },
+    "/api/public/covers/{id}": {
+      "get": {
+        "summary": "GET /api/public/covers/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_api_public_covers_id"
+      }
+    },
+    "/articles/{id}": {
+      "get": {
+        "summary": "GET /articles/{id}",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Public journal"
+        ],
+        "operationId": "get_articles_id"
+      }
+    },
+    "/api/preservation/manifest": {
+      "get": {
+        "summary": "GET /api/preservation/manifest",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "tags": [
+          "Preservation"
+        ],
+        "operationId": "get_api_preservation_manifest"
+      }
+    },
+    "/api/preservation/issues/{id}/manifest": {
+      "get": {
+        "summary": "GET /api/preservation/issues/{id}/manifest",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Preservation"
+        ],
+        "operationId": "get_api_preservation_issues_id_manifest"
+      }
+    },
+    "/api/preservation/issues/{id}/inventory": {
+      "get": {
+        "summary": "GET /api/preservation/issues/{id}/inventory",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Preservation"
+        ],
+        "operationId": "get_api_preservation_issues_id_inventory"
+      }
+    },
+    "/api/preservation/issues/{id}/package.zip": {
+      "get": {
+        "summary": "GET /api/preservation/issues/{id}/package.zip",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Permission or CSRF denied"
+          },
+          "409": {
+            "description": "Workflow, version, or uniqueness conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Preservation"
+        ],
+        "operationId": "get_api_preservation_issues_id_package_zip"
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Invalidate authenticated session",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-TOKEN",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Logged out"
+          }
+        },
+        "tags": [
+          "Authentication & identity"
+        ],
+        "operationId": "post_api_auth_logout"
+      }
+    },
+    "/oai": {
+      "get": {
+        "summary": "OAI-PMH six-verb endpoint",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "verb",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "identifier",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metadataPrefix",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "until",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "set",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resumptionToken",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OAI-PMH XML, including protocol errors",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "OAI-PMH"
+        ],
+        "operationId": "get_oai"
+      },
+      "post": {
+        "summary": "OAI-PMH six-verb endpoint",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OAI-PMH XML, including protocol errors",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "verb": {
+                    "type": "string"
+                  },
+                  "identifier": {
+                    "type": "string"
+                  },
+                  "metadataPrefix": {
+                    "type": "string"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "until": {
+                    "type": "string"
+                  },
+                  "set": {
+                    "type": "string"
+                  },
+                  "resumptionToken": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "verb"
+                ]
+              }
+            }
+          }
+        },
+        "tags": [
+          "OAI-PMH"
+        ],
+        "operationId": "post_oai"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "JSESSIONID"
+      }
+    },
+    "schemas": {
+      "UserInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 72
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "name"
+        ]
+      },
+      "LoginInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "Metadata": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "abstract": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "orcid": {
+                  "type": "string"
+                },
+                "affiliation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "email"
+              ]
+            }
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "funding": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "abstract",
+          "authors"
+        ]
+      },
+      "DraftInput": {
+        "type": "object",
+        "properties": {
+          "sectionId": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "example": "en"
+          },
+          "checklist": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "required": [
+          "sectionId",
+          "language",
+          "checklist",
+          "metadata"
+        ]
+      },
+      "MetadataInput": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "checklist": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version",
+          "metadata"
+        ]
+      },
+      "Role": {
+        "type": "string",
+        "enum": [
+          "READER",
+          "AUTHOR",
+          "EDITOR",
+          "JOURNAL_MANAGER",
+          "SECTION_EDITOR",
+          "REVIEWER",
+          "COPYEDITOR",
+          "LAYOUT_EDITOR",
+          "PROOFREADER",
+          "SITE_MANAGER"
+        ]
+      },
+      "State": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "SUBMITTED_UNASSIGNED",
+          "RETURNED_FOR_CORRECTIONS",
+          "IN_REVIEW",
+          "REVISIONS_REQUIRED",
+          "REVISION_SUBMITTED",
+          "REVIEW_ROUND_2",
+          "IN_COPYEDITING",
+          "COPYEDITING_COMPLETED",
+          "IN_PRODUCTION",
+          "READY_FOR_PUBLICATION",
+          "PUBLISHED",
+          "REJECTED_ARCHIVED"
+        ]
+      },
+      "Action": {
+        "type": "string",
+        "enum": [
+          "SUBMIT",
+          "DESK_REJECT",
+          "RETURN_TO_AUTHOR",
+          "SEND_TO_REVIEW",
+          "REQUEST_REVISIONS",
+          "ACCEPT",
+          "REJECT",
+          "SUBMIT_REVISION",
+          "START_REVIEW_ROUND",
+          "COMPLETE_COPYEDITING",
+          "START_PRODUCTION",
+          "APPROVE_PROOFS",
+          "PUBLISH"
+        ]
+      },
+      "ReviewMode": {
+        "type": "string",
+        "enum": [
+          "DOUBLE_BLIND",
+          "SINGLE_BLIND",
+          "OPEN"
+        ]
+      },
+      "Recommendation": {
+        "type": "string",
+        "enum": [
+          "ACCEPT",
+          "MINOR_REVISION",
+          "MAJOR_REVISION",
+          "REJECT"
+        ]
+      },
+      "FileKind": {
+        "type": "string",
+        "enum": [
+          "MANUSCRIPT",
+          "SUPPLEMENT",
+          "REVISION",
+          "BLIND_MANUSCRIPT",
+          "ANNOTATION",
+          "GALLEY",
+          "COVER"
+        ]
+      },
+      "Format": {
+        "type": "string",
+        "enum": [
+          "PDF",
+          "HTML",
+          "JATS_XML"
+        ]
+      },
+      "TransitionInput": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "action": {
+            "$ref": "#/components/schemas/Action"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 20000
+          }
+        },
+        "required": [
+          "version",
+          "action"
+        ]
+      },
+      "UserAssignment": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId"
+        ]
+      },
+      "StaffInput": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          }
+        },
+        "required": [
+          "userId",
+          "role"
+        ]
+      },
+      "ModeInput": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/ReviewMode"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "InviteInput": {
+        "type": "object",
+        "properties": {
+          "reviewerId": {
+            "type": "string"
+          },
+          "dueAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "formId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reviewerId",
+          "dueAt",
+          "formId"
+        ]
+      },
+      "ResponseInput": {
+        "type": "object",
+        "properties": {
+          "accept": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "accept"
+        ]
+      },
+      "ReviewInput": {
+        "type": "object",
+        "properties": {
+          "recommendation": {
+            "$ref": "#/components/schemas/Recommendation"
+          },
+          "answers": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "authorComments": {
+            "type": "string"
+          },
+          "editorComments": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recommendation",
+          "answers"
+        ]
+      },
+      "DiscussionInput": {
+        "type": "object",
+        "properties": {
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "AUTHOR_STAFF",
+              "EDITOR_ONLY"
+            ]
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 20000
+          }
+        },
+        "required": [
+          "visibility",
+          "body"
+        ]
+      },
+      "IssueInput": {
+        "type": "object",
+        "properties": {
+          "volume": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2200
+          },
+          "titles": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "volume",
+          "number",
+          "year",
+          "titles"
+        ]
+      },
+      "ScheduleInput": {
+        "type": "object",
+        "properties": {
+          "submissionId": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "submissionId",
+          "position"
+        ]
+      },
+      "VersionInput": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "GrantInput": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "sectionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "NamesInput": {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "names"
+        ]
+      },
+      "FormInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "schema": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "schema"
+        ]
+      },
+      "TemplateInput": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subject",
+          "body"
+        ]
+      },
+      "CoverInput": {
+        "type": "object",
+        "properties": {
+          "coverId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "coverId"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Administration"
+    },
+    {
+      "name": "Authentication & identity"
+    },
+    {
+      "name": "Discussions"
+    },
+    {
+      "name": "Files & galleys"
+    },
+    {
+      "name": "Issues & publication"
+    },
+    {
+      "name": "OAI-PMH"
+    },
+    {
+      "name": "Peer review"
+    },
+    {
+      "name": "Preservation"
+    },
+    {
+      "name": "Public journal"
+    },
+    {
+      "name": "Submissions & workflow"
+    }
+  ]
+}
