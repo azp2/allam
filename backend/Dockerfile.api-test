@@ -1,6 +1,0 @@
-FROM python:3.12-slim
-WORKDIR /tests
-COPY scripts scripts
-COPY docs/openapi.json docs/openapi.json
-ENV PYTHONUNBUFFERED=1
-ENTRYPOINT ["python", "scripts/test_all_apis.py"]
